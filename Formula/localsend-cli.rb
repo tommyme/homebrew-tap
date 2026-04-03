@@ -19,11 +19,11 @@ class LocalsendCli < Formula
   end
 
   def install
-    if Hardware::CPU.arm?
-      bin.install "localsend_macos_arm64" => "localsend"
-    else
-      bin.install "localsend_macos_x86_64" => "localsend"
-    end
+    suffix = Hardware::CPU.arm? ? "_macos_arm64" : "_macos_x86_64"
+    src = Pathname.new(staged_path)/"localsend#{suffix}"
+    dst = bin/"localsend"
+    FileUtils.cp src, dst
+    chmod 0755, dst
   end
 
   def plist
