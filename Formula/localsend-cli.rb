@@ -4,23 +4,22 @@
 class LocalsendCli < Formula
   desc "Send and receive files over LAN via CLI"
   homepage "https://localsend.org"
-  version "1.0.1"
+  version "1.0.2"
   license "MIT"
 
   on_macos do
     on_arm do
-      url "https://github.com/tommyme/localsend/releases/download/cli-v1.0.1/localsend_macos_arm64"
-      sha256 "c82a42a1c116ccdcf53d7aff34ec776fed49f4c430948c9fdc7d7a2ae953fc6f"
+      url "https://github.com/tommyme/localsend/releases/download/cli-v1.0.2/localsend-macos-arm64"
+      sha256 "TODO"
     end
     on_intel do
-      url "https://github.com/tommyme/localsend/releases/download/cli-v1.0.1/localsend_macos_x86_64"
-      sha256 "40905a62c0f2411eec051bb69090f4a67a5bbdf6c9b3b9e1f4de1f0efe326854"
+      url "https://github.com/tommyme/localsend/releases/download/cli-v1.0.2/localsend-macos-x64"
+      sha256 "TODO"
     end
   end
 
   def install
-    suffix = Hardware::CPU.arm? ? "macos_arm64" : "macos_x86_64"
-    bin.install "localsend_#{suffix}" => "localsend"
+    bin.install "localsend-macos-#{Hardware::CPU.arch}" => "localsend"
   end
 
   service do
@@ -31,6 +30,15 @@ class LocalsendCli < Formula
   end
 
   def caveats
-    "Run: brew services start tommyme/tap/localsend-cli"
+    <<~EOS
+      Usage:
+        localsend list              # List devices
+        localsend send "Name" file.txt  # Send file
+        localsend send "Name" --text "Hello"  # Send text
+        localsend send "Name" --clipboard  # Send clipboard
+
+      Background service:
+        brew services start tommyme/tap/localsend-cli
+    EOS
   end
 end
