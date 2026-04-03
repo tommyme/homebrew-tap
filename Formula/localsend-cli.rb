@@ -23,7 +23,14 @@ class LocalsendCli < Formula
     bin.install "localsend_#{suffix}" => "localsend"
   end
 
+  service do
+    run [opt_bin/"localsend", "--receive", "--auto", "--output", Dir.home + "/Downloads"]
+    keep_alive true
+    log_path "#{var}/log/localsend.log"
+    error_log_path "#{var}/log/localsend.log"
+  end
+
   def caveats
-    "Start background service: brew services start tommye/tap/localsend-cli"
+    "Run: brew services start tommyme/tap/localsend-cli"
   end
 end
