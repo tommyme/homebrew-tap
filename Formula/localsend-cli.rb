@@ -19,8 +19,8 @@ class LocalsendCli < Formula
   end
 
   def install
-    # Copy the downloaded binary to bin with the name 'localsend'
-    arch_suffix = OS.mac? && Hardware::CPU.arm? ? "_macos_arm64" : "_macos_x86_64"
+    # The downloaded binary has arch suffix, rename to 'localsend'
+    arch_suffix = Hardware::CPU.arm? ? "_macos_arm64" : "_macos_x86_64"
     FileUtils.cp staged_path.join("localsend#{arch_suffix}"), bin/"localsend"
     chmod 0755, bin/"localsend"
   end
