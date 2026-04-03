@@ -1,7 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
-class Localsend < Formula
+class LocalsendCli < Formula
   desc "Send and receive files over LAN via CLI"
   homepage "https://localsend.org"
   version "1.0.1"
@@ -19,7 +19,10 @@ class Localsend < Formula
   end
 
   def install
-    bin.install "localsend"
+    # Copy the downloaded binary to bin with the name 'localsend'
+    arch_suffix = OS.mac? && Hardware::CPU.arm? ? "_macos_arm64" : "_macos_x86_64"
+    FileUtils.cp staged_path.join("localsend#{arch_suffix}"), bin/"localsend"
+    chmod 0755, bin/"localsend"
   end
 
   def plist
@@ -29,7 +32,7 @@ class Localsend < Formula
       <plist version="1.0">
       <dict>
         <key>Label</key>
-        <string>org.localsend.localsend</string>
+        <string>org.localsend.localsend-cli</string>
         <key>ProgramArguments</key>
         <array>
           <string>#{opt_bin}/localsend</string>
