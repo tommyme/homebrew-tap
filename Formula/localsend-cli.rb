@@ -19,15 +19,14 @@ class LocalsendCli < Formula
   end
 
   def install
-    suffix = Hardware::CPU.arm? ? "_macos_arm64" : "_macos_x86_64"
-    src = Pathname.new(staged_path)/"localsend#{suffix}"
-    dst = bin/"localsend"
-    FileUtils.cp src, dst
-    chmod 0755, dst
+    suffix = Hardware::CPU.arm? ? "macos_arm64" : "macos_x86_64"
+    bin.install "localsend_#{suffix}" => "localsend"
   end
 
+  plist_options startup: true
+
   def plist
-    <<~PLIST
+    <<~EOS
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
       <plist version="1.0">
@@ -46,16 +45,12 @@ class LocalsendCli < Formula
         <true/>
         <key>KeepAlive</key>
         <true/>
-        <key>StandardOutPath</key>
-        <string>/var/log/localsend.log</string>
-        <key>StandardErrorPath</key>
-        <string>/var/log/localsend.log</string>
       </dict>
       </plist>
-    PLIST
+    EOS
   end
 
   test do
-    system "#{bin}/localsend", "--help"
+    assert_match /LocalSend/, shell_output("#{bin}/localsend --help")
   end
 end
